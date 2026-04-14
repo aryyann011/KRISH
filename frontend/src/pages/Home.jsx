@@ -40,7 +40,7 @@ export default function Home() {
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         >
           <Leaf className="w-8 h-8 text-[#1b3d2f]" />
-          <span className="text-xl font-bold text-[#1b3d2f]">FarmWise AI</span>
+          <span className="text-xl font-bold text-[#1b3d2f]">Krishi</span>
         </motion.div>
         
         <motion.div 
@@ -135,23 +135,23 @@ export default function Home() {
         {/* Floating Icons Background logic (Absolute positioning) within Hero */}
         <motion.div 
           animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-          className="absolute top-[25%] left-[10%] bg-white/80 backdrop-blur-md p-3.5 rounded-full shadow-md hidden lg:block border border-white">
+          className="absolute top-[25%] left-[10%] bg-white/95 p-3.5 rounded-full shadow-md hidden lg:block border border-white/40">
           <Leaf className="w-7 h-7 text-[#1b3d2f]" />
         </motion.div>
         <motion.div 
           animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 3, ease: "easeInOut", delay: 1 }}
-          className="absolute top-[40%] left-[5%] bg-white/80 backdrop-blur-md p-2.5 rounded-full shadow-md hidden lg:block border border-white">
+          className="absolute top-[40%] left-[5%] bg-white/95 p-2.5 rounded-full shadow-md hidden lg:block border border-white/40">
           <Wind className="w-5 h-5 text-[#1b3d2f]" />
         </motion.div>
         
         <motion.div 
           animate={{ y: [0, -8, 0] }} transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut", delay: 0.5 }}
-          className="absolute top-[30%] right-[12%] bg-white/80 backdrop-blur-md p-3.5 rounded-full shadow-md hidden lg:block border border-white">
+          className="absolute top-[30%] right-[12%] bg-white/95 p-3.5 rounded-full shadow-md hidden lg:block border border-white/40">
           <Droplet className="w-6 h-6 text-[#1b3d2f]" />
         </motion.div>
         <motion.div 
           animate={{ y: [0, 10, 0] }} transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 2 }}
-          className="absolute top-[45%] right-[8%] bg-white/80 backdrop-blur-md p-2.5 rounded-full shadow-md hidden lg:block border border-white">
+          className="absolute top-[45%] right-[8%] bg-white/95 p-2.5 rounded-full shadow-md hidden lg:block border border-white/40">
           <Droplet className="w-4 h-4 text-[#1b3d2f]" />
         </motion.div>
 
@@ -398,11 +398,9 @@ export default function Home() {
           >
              
              {/* Background glow logic inside CTA */}
-             <motion.div 
-               animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
-               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-               className="absolute top-0 right-0 w-64 h-64 bg-[#def0c6] rounded-full mix-blend-overlay filter blur-3xl opacity-20"
-             ></motion.div>
+             <div 
+               className="absolute top-0 right-0 w-64 h-64 bg-[#def0c6] rounded-full mix-blend-overlay filter blur-3xl opacity-20 pointer-events-none"
+             ></div>
 
              <div className="md:w-1/2 mb-10 md:mb-0 z-10 pr-0 md:pr-10">
                 <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight mb-4 tracking-tight">
@@ -483,7 +481,7 @@ export default function Home() {
             <div className="col-span-1 md:col-span-1">
               <div className="flex items-center space-x-2 mb-6">
                 <Leaf className="w-6 h-6 text-[#1b3d2f]" />
-                <span className="text-xl font-bold text-[#1b3d2f]">FarmWise AI</span>
+                <span className="text-xl font-bold text-[#1b3d2f]">Krishi</span>
               </div>
               <p className="text-[#395c47] text-sm leading-relaxed mb-6">
                 Revolutionizing Indian agriculture by transforming complex hyper-local data into simple, actionable decisions for farmers everywhere.
@@ -540,7 +538,7 @@ export default function Home() {
           
           <div className="border-t border-slate-200 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p className="text-[#395c47] text-sm mb-4 md:mb-0">
-              © 2026 FarmWise AI (Krishi App). All rights reserved.
+              © 2026 Krishi App. All rights reserved.
             </p>
             <div className="flex space-x-6">
               <a href="#" className="text-[#395c47] text-sm hover:text-[#1b3d2f] transition-colors">Privacy Policy</a>
