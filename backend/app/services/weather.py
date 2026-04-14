@@ -26,5 +26,3 @@ def get_weather(city: str):
         print(f"API Key used: {WEATHER_API_KEY}")
         print(f"API URL: {WEATHER_API_URL}")
         raise
-
-
