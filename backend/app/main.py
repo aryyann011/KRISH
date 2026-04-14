@@ -5,6 +5,7 @@ from app.routes import farmer, sensor, recommendation
 from app.services.predict import predict_crop
 from app.services.irrigation import irrigation_decision, soil_condition_logic
 from app.services.weather import get_weather
+from app.services.llm import generate_agricultural_insight
 
 app = FastAPI(title="Smart Agri System API")
 
@@ -44,10 +45,26 @@ def predict(city: str, soil: str):
     # 4. Irrigation
     irrigation = irrigation_decision(temp, rainfall, soil_condition)
 
+    # 5. LLM Synthesis based on Knowledge Base and ML Output
+    user_inputs = {
+        "city": city,
+        "soil": soil,
+        "weather": weather
+    }
+    
+    ml_outputs = {
+        "predicted_crop": crop,
+        "soil_condition": soil_condition,
+        "irrigation": irrigation
+    }
+    
+    llm_recommendation = generate_agricultural_insight(user_inputs, ml_outputs)
+
     return {
         "location": city,
         "weather": weather,
         "predicted_crop": crop,
         "soil_condition": soil_condition,
-        "irrigation": irrigation
+        "irrigation": irrigation,
+        "ai_recommendation": llm_recommendation
     }
