@@ -14,3 +14,4 @@ def predict_crop(temp, humidity, rainfall, soil):
     crop = label_encoder.inverse_transform(pred)[0]
 
     return crop
+

@@ -14,3 +14,5 @@ def get_weather(city: str):
         "humidity": data["main"]["humidity"],
         "rainfall": data.get("rain", {}).get("1h", 0)  # safe fallback
     }
+
+
