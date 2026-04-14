@@ -5,10 +5,10 @@
   "scripts": {
     "dev": "react-scripts start",
     "start": "react-scripts start",
-    "dev": "react-scripts start",
     "build": "react-scripts build"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.103.0",
     "express": "^5.2.1",
     "framer-motion": "^12.38.0",
     "lucide-react": "^1.8.0",
