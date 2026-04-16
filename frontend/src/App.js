@@ -11,6 +11,7 @@ import { supabase } from './services/supabaseClient';
 // Dashboard imports
 import DashboardLayout from './components/layout/DashboardLayout';
 import Dashboard from './pages/Dashboard';
+import FarmingGuide from './pages/FarmingGuide';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -77,7 +78,7 @@ function App() {
           <Route path="farm" element={<PlaceholderPage title="Your Farm Map" />} />
           <Route path="crops" element={<PlaceholderPage title="Crop Insights & Health" />} />
           <Route path="profit" element={<PlaceholderPage title="Profit Estimator Studio" />} />
-          <Route path="guide" element={<PlaceholderPage title="Farming Wiki Guide" />} />
+          <Route path="guide" element={<FarmingGuide />} />
           <Route path="settings" element={<PlaceholderPage title="Account Settings" />} />
         </Route>
       </Routes>

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User, Sprout, CloudRain, ShieldAlert, MoreHorizontal } from 'lucide-react';
+import { fetchPrediction } from '../services/api';
 
 export default function AIAssistant() {
   const [messages, setMessages] = useState([
@@ -11,6 +12,7 @@ export default function AIAssistant() {
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [farmData, setFarmData] = useState({ city: 'Kolkata', soil: 'Alluvial' });
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -21,7 +23,14 @@ export default function AIAssistant() {
     scrollToBottom();
   }, [messages]);
 
-  const handleSend = (e) => {
+  // Get farm data from session/localStorage (set by Dashboard)
+  useEffect(() => {
+    const savedCity = localStorage.getItem('farmCity') || 'Kolkata';
+    const savedSoil = localStorage.getItem('farmSoil') || 'Alluvial';
+    setFarmData({ city: savedCity, soil: savedSoil });
+  }, []);
+
+  const handleSend = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
 
@@ -30,16 +39,28 @@ export default function AIAssistant() {
     setInput('');
     setIsTyping(true);
 
-    // Mock API Response delay
-    setTimeout(() => {
-      const aiResponse = { 
-        id: Date.now() + 1, 
-        sender: 'ai', 
-        text: 'This feature will be connected to the backend soon! For now, your crops are looking healthy. Wait for your backend team to hook up the endpoint!' 
+    try {
+      // Call backend API to get AI recommendation with farm context
+      const result = await fetchPrediction(farmData.city, farmData.soil);
+      
+      let aiResponse = {
+        id: Date.now() + 1,
+        sender: 'ai',
+        text: result?.ai_recommendation || 'Unable to generate recommendation. Please try again.'
       };
+      
       setMessages((prev) => [...prev, aiResponse]);
+    } catch (err) {
+      console.error('API Error:', err);
+      const errorResponse = {
+        id: Date.now() + 1,
+        sender: 'ai',
+        text: 'Sorry, I couldn\'t connect to the server. Please make sure the backend is running and try again.'
+      };
+      setMessages((prev) => [...prev, errorResponse]);
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
   const handleSuggestion = (text) => {
@@ -106,12 +127,12 @@ export default function AIAssistant() {
       {/* Suggested Prompts */}
       {messages.length < 3 && (
         <div className="p-4 bg-white dark:bg-slate-800 border-t border-neutral-200 dark:border-slate-700 transition-colors">
-          <p className="text-xs text-neutral-500 dark:text-neutral-400 font-medium mb-3 uppercase tracking-wider">Suggested Questions</p>
+          <p className="text-xs text-neutral-500 dark:text-neutral-400 font-medium mb-3 uppercase tracking-wider">Suggested Questions for {farmData.city}</p>
           <div className="flex flex-wrap gap-2">
             {[
-              { icon: <Sprout size={14}/>, text: "What's the best fertilizer for my current crop?" },
-              { icon: <CloudRain size={14}/>, text: "Should I irrigate today based on the weather?" },
-              { icon: <ShieldAlert size={14}/>, text: "How to prevent pest attacks this season?" }
+              { icon: <Sprout size={14}/>, text: "What crops should I grow?" },
+              { icon: <CloudRain size={14}/>, text: "Should I water today?" },
+              { icon: <ShieldAlert size={14}/>, text: "What's your recommendation based on my farm?" }
             ].map((sug, i) => (
               <button 
                 key={i} 
