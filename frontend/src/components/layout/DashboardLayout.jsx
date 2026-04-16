@@ -6,7 +6,7 @@ import { supabase } from '../../services/supabaseClient';
 import { useTranslation } from 'react-i18next';
 
 export default function DashboardLayout() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [user, setUser] = useState(null);
@@ -90,7 +90,7 @@ export default function DashboardLayout() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" size={18} />
               <input 
                 type="text" 
-                placeholder="Search resources..." 
+                placeholder={t('layout.search_placeholder')}
                 className="bg-neutral-50 dark:bg-slate-900 border border-neutral-200 dark:border-slate-700 rounded-full py-2 pl-10 pr-4 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 w-64 text-neutral-800 dark:text-neutral-200 placeholder-neutral-400"
               />
             </div>
@@ -139,7 +139,7 @@ export default function DashboardLayout() {
                 <p className="text-sm font-semibold text-neutral-800 dark:text-neutral-100 line-clamp-1 max-w-[120px]">
                   {user?.user_metadata?.full_name || user?.email?.split('@')[0] || "Farmer"}
                 </p>
-                <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">Verified Account</p>
+                <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">{t('layout.verified_account')}</p>
               </div>
             </div>
           </div>
