@@ -5,22 +5,44 @@ from functools import lru_cache
 
 load_dotenv()
 
-# Configure the API key from environment variable
-genai.configure(api_key=os.environ.get("GEMINI_API_KEY", "YOUR_GEMINI_API_KEY_HERE"))
+# Configure the API key from environment variable (.env file)
+api_key = os.environ.get("GEMINI_API_KEY")
+if not api_key:
+    raise ValueError("GEMINI_API_KEY not found in environment variables. Please add it to .env file.")
+
+genai.configure(api_key=api_key)
+print(f"[LLM] Configured Gemini API with key: {api_key[:10]}...{api_key[-10:]}")
 
 # Cached helper function to reduce API calls
 @lru_cache(maxsize=100)
 def cached_llm_call(prompt: str) -> str:
-    """Cached wrapper for Gemini LLM calls"""
+    """
+    Cached wrapper for Gemini LLM calls
+    Uses gemini-2.5-pro (latest production model)
+    Falls back to gemini-2.5-flash if needed
+    """
     try:
-        model = genai.GenerativeModel('gemini-2.0-flash')
-        response = model.generate_content(prompt)
-        return response.text
+        # Try primary model first (best quality)
+        try:
+            model = genai.GenerativeModel('veo-3.1-fast-generate-preview')
+            response = model.generate_content(prompt)
+            return response.text
+        except Exception as primary_error:
+            # Fallback to flash model
+            print(f"[LLM] Primary model error, trying fallback. Error: {primary_error}")
+            model = genai.GenerativeModel('veo-3.1-fast-generate-preview')
+            response = model.generate_content(prompt)
+            return response.text
+            
     except Exception as e:
         error_msg = str(e)
         if "429" in error_msg or "quota" in error_msg.lower():
-            return "API quota exceeded. Please enable billing or try again later."
-        return f"Error generating Gemini response: {e}"
+            return "Quota exceeded. Your daily API limit is reached. Please try again tomorrow or upgrade your API plan."
+        if "404" in error_msg or "not found" in error_msg.lower():
+            return "Model not found. Please check your API key permissions."
+        if "401" in error_msg or "permission" in error_msg.lower():
+            return "API key authentication failed. Please verify your credentials."
+        return f"Error generating recommendation: {str(e)[:100]}"
 
 # Define the knowledge base (RAG chunks) provided by the user
 KNOWLEDGE_BASE = """
@@ -65,11 +87,13 @@ def generate_agricultural_insight(user_input: dict, ml_output: dict) -> str:
 You are an expert AI Agricultural Assistant for Indian farmers.
 
 STRICT RULES:
-- Respond ONLY in simple Bengali, Hindi, or English (whichever is more appropriate for the user).
+-First line MUST be clear decision: YES / NO / WAIT
+- Respond ONLY in simple Bengali
 - Use 2–3 short sentences
 - Give practical advice only
 - Do NOT use technical language
 -max 3 sentences
+-not gave confusing answer
 
 
 PRIORITY:

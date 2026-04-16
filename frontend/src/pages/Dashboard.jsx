@@ -59,6 +59,13 @@ export default function Dashboard() {
     }
   }, [city]);
 
+  // Save farm data to localStorage for AI Assistant
+  useEffect(() => {
+    localStorage.setItem('farmCity', city);
+    localStorage.setItem('farmSoil', soil);
+    console.log(`💾 Saved farm data: ${city}, ${soil}`);
+  }, [city, soil]);
+
   const loadData = async () => {
     setLoading(true);
     setError(null);
@@ -75,11 +82,20 @@ export default function Dashboard() {
       setError("Connecting to backend failed. Make sure your Python backend is running format: uvicorn app.main:app");
       setData({
         location: city,
-        weather: { temperature: 28, humidity: 72, rainfall: 4 },
-        predicted_crop: "Rice",
-        soil_condition: "Wet",
-        irrigation: "No",
-        ai_recommendation: "Hold off on watering today since moisture sits high (72%). Ensure the field has appropriate drainage; your rice crop is growing optimally."
+        weather: { 
+          temperature: null, 
+          humidity: null, 
+          rainfall: null,
+          rain_probability: null,
+          feels_like: null,
+          cloud_coverage: null,
+          weather: null,
+          description: null
+        },
+        predicted_crop: null,
+        soil_condition: null,
+        irrigation: null,
+        ai_recommendation: "Unable to fetch data. Please ensure the backend is running and try again."
       });
     } finally {
       setLoading(false);
@@ -195,8 +211,14 @@ export default function Dashboard() {
           </div>
 
           <div className="mt-8 flex items-center gap-6 pt-4 border-t border-neutral-100 dark:border-slate-700 text-sm text-neutral-600 dark:text-neutral-300 transition-colors">
-             <div className="flex items-center gap-1.5 font-medium"><Droplets size={16} className="text-blue-500 dark:text-blue-400"/> {data?.weather?.humidity ?? '--'}% Hum</div>
-             <div className="flex items-center gap-1.5 font-medium"><Wind size={16} className="text-sky-500 dark:text-sky-400"/> {data?.weather?.rainfall ?? '--'}mm Rain</div>
+             <div className="flex items-center gap-1.5 font-medium">
+               <Droplets size={16} className="text-blue-500 dark:text-blue-400"/> 
+               {data?.weather?.humidity ?? '--'}% Humidity
+             </div>
+             <div className="flex items-center gap-1.5 font-medium">
+               <Wind size={16} className="text-sky-500 dark:text-sky-400"/> 
+               {data?.weather?.rain_probability ?? data?.weather?.rainfall ?? '--'}% Rain
+             </div>
           </div>
         </div>
 
@@ -335,7 +357,7 @@ export default function Dashboard() {
                     {task.due}
                   </span>
                 </div>
-              </div>
+              </div> 
             ))}
           </div>
         </div>
