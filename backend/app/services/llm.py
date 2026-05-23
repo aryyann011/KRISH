@@ -69,13 +69,13 @@ def clear_llm_cache():
 
 def cached_llm_call(prompt: str, max_retries: int = 3) -> str:
     """
-    Cached wrapper for Gemini LLM calls with retry logic
+    Cached wrapper for Groq LLM calls with retry logic
     - Reduces API calls via intelligent caching
     - Retries on quota errors with exponential backoff
     - Throttles requests to avoid rate limiting
     
     Args:
-        prompt: The prompt to send to Gemini
+        prompt: The prompt to send to Groq
         max_retries: Number of retry attempts on quota errors (default: 3)
     
     Returns:
@@ -151,7 +151,7 @@ def cached_llm_call(prompt: str, max_retries: int = 3) -> str:
             if "404" in str(e) or "not found" in error_msg:
                 return "❌ Model not found. Please check your API key permissions."
             if "401" in str(e) or "permission" in error_msg or "unauthenticated" in error_msg:
-                return "❌ API key authentication failed. Please verify your GEMINI_API_KEY in .env"
+                return "❌ API key authentication failed. Please verify your GROQ_API_KEY in .env"
             if "invalid" in error_msg or "api_key" in error_msg:
                 return "❌ Invalid API key. Check your .env file."
             
